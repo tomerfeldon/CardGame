@@ -43,11 +43,28 @@ final class MenuViewController: UIViewController {
         }
         updateNameUI()
         refreshStartAvailability()
+
+        // Re-sample location whenever the app comes back to the foreground
+        // while the menu is on screen (spec: sample on every app open).
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(appWillEnterForeground),
+            name: UIApplication.willEnterForegroundNotification,
+            object: nil)
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        // Each time the menu appears we (re)sample the location.
+        sampleLocation()
+    }
+
+    @objc private func appWillEnterForeground() {
+        guard isViewLoaded, view.window != nil else { return }
+        sampleLocation()
+    }
+
+    /// Resets the resolved side and starts a fresh one-shot location request.
+    private func sampleLocation() {
         resolvedSide = nil
         highlightSide(nil)
         refreshStartAvailability()
@@ -119,9 +136,11 @@ final class MenuViewController: UIViewController {
     }
 
     private func refreshStartAvailability() {
+        // Per the spec, the START button is shown only once a location (side)
+        // has been resolved and a name exists — the game can't run without both.
         let ready = (playerName?.isEmpty == false) && (resolvedSide != nil)
+        startButton.isHidden = !ready
         startButton.isEnabled = ready
-        startButton.alpha = ready ? 1.0 : 0.4
     }
 
     // MARK: Navigation
