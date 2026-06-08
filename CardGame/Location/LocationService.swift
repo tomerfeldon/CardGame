@@ -36,6 +36,7 @@ final class LocationService: NSObject, CLLocationManagerDelegate {
 
     /// Kicks off a single location request, prompting for permission if needed.
     func start() {
+        hasResolved = false
         switch manager.authorizationStatus {
         case .notDetermined:
             manager.requestWhenInUseAuthorization()
