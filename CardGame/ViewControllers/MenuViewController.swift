@@ -94,14 +94,16 @@ final class MenuViewController: UIViewController {
 
     private func updateNameUI() {
         if let name = playerName, !name.isEmpty {
+            // Subsequent opens: show the name, hide the button.
             greetingLabel.text = "Hi \(name)"
             greetingLabel.isHidden = false
+            nameButton.isHidden = true
         } else {
+            // First time: show only the button, no greeting.
             greetingLabel.text = nil
             greetingLabel.isHidden = true
+            nameButton.isHidden = false
         }
-        // The button stays available so the name can be set or changed.
-        nameButton.setTitle("Insert name", for: .normal)
     }
 
     // MARK: Location handling
