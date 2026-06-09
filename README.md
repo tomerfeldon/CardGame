@@ -40,7 +40,7 @@ CardGame/
 │   ├── Deck.swift          // the card pool + drawing two cards
 │   └── Side.swift          // enum: west / east
 ├── Game/
-│   └── GameEngine.swift    // pure game logic (no UIKit) — covered by unit tests
+│   └── GameEngine.swift    // pure game logic (no UIKit) - covered by unit tests
 ├── Location/
 │   └── LocationService.swift // CLLocationManager wrapper + side from longitude
 ├── ViewControllers/
@@ -62,7 +62,7 @@ Game → (segue `toSummary`) → Summary → `popToRootViewController` back to t
 
 ## 🃏 Card assets
 
-- A pool of **26 cards**: clubs A–K and diamonds A–K — the two complete suits.
+- A pool of **26 cards**: clubs A–K and diamonds A–K - the two complete suits.
 - Two card backs: red (`card_back_red`) and black (`card_back_black`).
 - Imageset names follow the `<suit>_<rank>` format (e.g. `clubs_13`, `diamonds_14`),
   so `Card.assetName` maps directly to an image.
@@ -104,5 +104,5 @@ after 10 rounds, an end-of-game tie going to PC, and side selection from longitu
 
 ## 🔐 Permissions
 
-`NSLocationWhenInUseUsageDescription` is set in `Info.plist` — required to obtain
+`NSLocationWhenInUseUsageDescription` is set in `Info.plist` - required to obtain
 the location while the app is in use.
