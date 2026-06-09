@@ -9,6 +9,13 @@ tests using Swift Testing.
 
 ---
 
+## 🎬 Demo
+
+<!-- Drag your gameplay video here while editing this file on GitHub.
+     GitHub will upload it and replace this comment with a video link. -->
+
+---
+
 ## 📱 Screens
 
 | Screen | Description |
