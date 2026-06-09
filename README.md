@@ -76,7 +76,6 @@ Game → (segue `toSummary`) → Summary → `popToRootViewController` back to t
 ```bash
 git clone https://github.com/tomerfeldon/CardGame
 cd CardGame
-git checkout claude/compassionate-hawking-6PDD2
 open CardGame.xcodeproj
 ```
 
