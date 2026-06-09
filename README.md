@@ -1,74 +1,77 @@
 # CardGame 🃏
 
-משחק קלפים ל-iOS (UIKit) בן שלושה מסכים. צד השחקן (מזרח/מערב) נקבע אוטומטית לפי
-מיקום ה-GPS, ולאחר מכן מתנהל משחקון אוטומטי של 10 סבבים שבו הקלף החזק יותר זוכה בנקודה.
+A three-screen iOS card game (UIKit). The player's side (East/West) is chosen
+automatically from the device's GPS location, after which an automatic 10-round
+match plays out where the stronger card wins a point each round.
 
-נכתב ב-Swift עם Storyboard (Interface Builder), Core Location, ובדיקות יחידה ב-Swift Testing.
-
----
-
-## 📱 המסכים
-
-| מסך | תיאור |
-|------|--------|
-| **תפריט (Menu)** | בפעם הראשונה מוצג כפתור **Insert name**; אחרי שמזינים שם הוא נשמר ומוצג **"Hi \<name\>"**. בכל פתיחה נדגם המיקום, מסומן הצד (West/East), וכפתור **START** מופיע רק כשיש גם שם וגם מיקום. |
-| **משחק (Game)** | מתחיל אוטומטית, ללא כפתורים. כל 5 שניות הקלפים מתהפכים: הפנים מוצגים ~3 שניות, הקלף החזק זוכה בנקודה, ואז היפוך חזרה לגב. הניקוד והטיימר מתעדכנים בכל סבב. אחרי 10 סבבים → מסך הסיכום. |
-| **סיכום (Summary)** | מציג **Winner** ואת הניקוד, עם כפתור **BACK TO MENU** שמחזיר לתפריט הראשי. |
+Built in Swift with Storyboard (Interface Builder), Core Location, and unit
+tests using Swift Testing.
 
 ---
 
-## 🎮 חוקי המשחק
+## 📱 Screens
 
-- **בחירת צד**: משווים את ה-longitude של השחקן לקו הייחוס `34.817549168324334`.
-  ממזרח לקו → צד מזרח (East), אחרת → צד מערב (West).
-- **חוזק הקלף** = ערך הקלף: `2..10`, `J=11`, `Q=12`, `K=13`, `A=14` (אס גבוה).
-- בכל סבב מוגרלים שני קלפים. הקלף החזק יותר מזכה את בעליו בנקודה.
-- **שוויון** בין הקלפים → אף אחד לא מקבל נקודה (מתעלמים).
-- **תיקו בסוף המשחק** → הבית (PC) מנצח.
-- המשחק לא יכול לפעול ללא **מיקום וגם שם**.
+| Screen | Description |
+|--------|-------------|
+| **Menu** | The first time, an **Insert name** button is shown; once a name is entered it is saved and displayed as **"Hi \<name\>"**. On every launch the location is sampled, the side (West/East) is highlighted, and the **START** button appears only when both a name and a location exist. |
+| **Game** | Starts automatically, with no buttons. Every 5 seconds the cards flip: the faces are shown for ~3 seconds, the stronger card scores a point, then they flip back. The score and timer update each round. After 10 rounds → the summary screen. |
+| **Summary** | Shows the **Winner** and their score, with a **BACK TO MENU** button that returns to the main menu. |
 
 ---
 
-## 🏗 ארכיטקטורה
+## 🎮 Game rules
+
+- **Side selection**: the player's longitude is compared to the reference meridian
+  `34.817549168324334`. East of the line → East side, otherwise → West side.
+- **Card strength** = card value: `2..10`, `J=11`, `Q=12`, `K=13`, `A=14` (Ace high).
+- Each round draws two cards. The stronger card scores a point for its owner.
+- **A tie between the two cards** → no one scores (ignored).
+- **A tie at the end of the game** → the house (PC) wins.
+- The game cannot run without **both a location and a name**.
+
+---
+
+## 🏗 Architecture
 
 ```
 CardGame/
 ├── Models/
-│   ├── Card.swift          // קלף בודד: חליפה, ערך, חוזק, שם asset
-│   ├── Deck.swift          // מאגר הקלפים + הגרלת שני קלפים
+│   ├── Card.swift          // a single card: suit, rank, strength, asset name
+│   ├── Deck.swift          // the card pool + drawing two cards
 │   └── Side.swift          // enum: west / east
 ├── Game/
-│   └── GameEngine.swift    // לוגיקת המשחק הטהורה (ללא UIKit) — נבדקת ב-unit tests
+│   └── GameEngine.swift    // pure game logic (no UIKit) — covered by unit tests
 ├── Location/
-│   └── LocationService.swift // עטיפת CLLocationManager + בחירת צד לפי longitude
+│   └── LocationService.swift // CLLocationManager wrapper + side from longitude
 ├── ViewControllers/
 │   ├── MenuViewController.swift
 │   ├── GameViewController.swift
 │   └── SummaryViewController.swift
-├── Base.lproj/Main.storyboard  // ה-UI: Navigation Controller + 3 סצנות
-└── Assets.xcassets/            // 26 קלפים (clubs + diamonds, A–K) + 2 גבי קלף
+├── Base.lproj/Main.storyboard  // the UI: Navigation Controller + 3 scenes
+└── Assets.xcassets/            // 26 cards (clubs + diamonds, A–K) + 2 card backs
 ```
 
-**הפרדת אחריות:** לוגיקת המשחק (`GameEngine`) ובחירת הצד (`LocationService.side(forLongitude:)`)
-מופרדות מ-UIKit כדי שיהיו ניתנות לבדיקה באופן עצמאי.
+**Separation of concerns:** the game logic (`GameEngine`) and side selection
+(`LocationService.side(forLongitude:)`) are kept independent of UIKit so they can
+be unit tested on their own.
 
-**ניווט:** `UINavigationController` (סרגל מוסתר) → Menu → (segue `toGame`) → Game →
-(segue `toSummary`) → Summary → `popToRootViewController` חזרה לתפריט.
-
----
-
-## 🃏 נכסי הקלפים
-
-- מאגר של **26 קלפים**: תלתן (clubs) A–K ויהלום (diamonds) A–K — שתי החליפות השלמות.
-- שני גבי קלף: אדום (`card_back_red`) ושחור (`card_back_black`).
-- שמות ה-imagesets בפורמט `<suit>_<rank>` (למשל `clubs_13`, `diamonds_14`),
-  כך ש-`Card.assetName` ממפה ישירות לתמונה.
+**Navigation:** `UINavigationController` (hidden bar) → Menu → (segue `toGame`) →
+Game → (segue `toSummary`) → Summary → `popToRootViewController` back to the menu.
 
 ---
 
-## ▶️ בנייה והרצה
+## 🃏 Card assets
 
-**דרישות:** Xcode 16.2+, iOS 18.2+ (סימולטור או מכשיר), אוריינטציית **Landscape**.
+- A pool of **26 cards**: clubs A–K and diamonds A–K — the two complete suits.
+- Two card backs: red (`card_back_red`) and black (`card_back_black`).
+- Imageset names follow the `<suit>_<rank>` format (e.g. `clubs_13`, `diamonds_14`),
+  so `Card.assetName` maps directly to an image.
+
+---
+
+## ▶️ Build & run
+
+**Requirements:** Xcode 16.2+, iOS 18.2+ (simulator or device), **Landscape** orientation.
 
 ```bash
 git clone https://github.com/tomerfeldon/CardGame
@@ -77,27 +80,29 @@ git checkout claude/compassionate-hawking-6PDD2
 open CardGame.xcodeproj
 ```
 
-ב-Xcode: בחר סימולטור ולחץ **Run** (`Cmd+R`).
+In Xcode: pick a simulator and press **Run** (`Cmd+R`).
 
-### דימוי מיקום בסימולטור
-המשחק זקוק למיקום. בסימולטור:
+### Simulating a location in the simulator
+The game needs a location. In the simulator:
 **Features → Location → Custom Location…**
-- `longitude` גדול מ-`34.8175` → צד **מזרח (East)**
-- `longitude` קטן מ-`34.8175` → צד **מערב (West)**
+- `longitude` greater than `34.8175` → **East** side
+- `longitude` less than `34.8175` → **West** side
 
-> אם לא נבחר מיקום, תוצג הודעה שהמשחק דורש מיקום.
-
----
-
-## ✅ בדיקות
-
-בדיקות יחידה ל-`GameEngine` ולבחירת הצד נמצאות ב-`CardGameTests/CardGameTests.swift`
-(מבוססות Swift Testing). להרצה: **`Cmd+U`** ב-Xcode.
-
-מכוסה: השוואת חוזק וניקוד, דילוג בשוויון, סיום אחרי 10 סבבים, תיקו → PC, ובחירת צד מ-longitude.
+> If no location is set, a message explains that the game requires a location.
 
 ---
 
-## 🔐 הרשאות
+## ✅ Tests
 
-`NSLocationWhenInUseUsageDescription` מוגדר ב-`Info.plist` — נדרש לקבלת מיקום בזמן השימוש.
+Unit tests for `GameEngine` and side selection live in
+`CardGameTests/CardGameTests.swift` (Swift Testing). Run them with **`Cmd+U`** in Xcode.
+
+Covered: card-strength comparison and scoring, skipping on a tie, the game ending
+after 10 rounds, an end-of-game tie going to PC, and side selection from longitude.
+
+---
+
+## 🔐 Permissions
+
+`NSLocationWhenInUseUsageDescription` is set in `Info.plist` — required to obtain
+the location while the app is in use.
