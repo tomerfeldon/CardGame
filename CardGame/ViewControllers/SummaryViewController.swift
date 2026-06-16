@@ -27,6 +27,12 @@ final class SummaryViewController: UIViewController {
         scoreLabel.text = "score: \(winnerScore)"
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        // Victory / end-of-game sound.
+        SoundManager.shared.playWin()
+    }
+
     @IBAction private func backToMenuTapped(_ sender: UIButton) {
         navigationController?.popToRootViewController(animated: true)
     }

@@ -48,21 +48,19 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="globe.americas.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="west-iv">
-                                <rect key="frame" x="40" y="136" width="120" height="120"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="globe_west" translatesAutoresizingMaskIntoConstraints="NO" id="west-iv">
+                                <rect key="frame" x="0.0" y="106" width="120" height="180"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="120" id="west-iv-w"/>
-                                    <constraint firstAttribute="height" constant="120" id="west-iv-h"/>
+                                    <constraint firstAttribute="height" constant="180" id="west-iv-h"/>
                                 </constraints>
-                                <color key="tintColor" systemColor="systemBlueColor"/>
                             </imageView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="globe.asia.australia.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="east-iv">
-                                <rect key="frame" x="692" y="136" width="120" height="120"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="globe_east" translatesAutoresizingMaskIntoConstraints="NO" id="east-iv">
+                                <rect key="frame" x="732" y="106" width="120" height="180"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="120" id="east-iv-w"/>
-                                    <constraint firstAttribute="height" constant="120" id="east-iv-h"/>
+                                    <constraint firstAttribute="height" constant="180" id="east-iv-h"/>
                                 </constraints>
-                                <color key="tintColor" systemColor="systemGreenColor"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="West Side" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="west-lbl">
                                 <rect key="frame" x="60" y="264" width="80" height="21"/>
@@ -96,9 +94,9 @@
                             <constraint firstItem="name-btn" firstAttribute="top" secondItem="menu-safe" secondAttribute="top" constant="12" id="name-btn-top"/>
                             <constraint firstItem="greet-lbl" firstAttribute="centerX" secondItem="menu-safe" secondAttribute="centerX" id="greet-lbl-cx"/>
                             <constraint firstItem="greet-lbl" firstAttribute="top" secondItem="name-btn" secondAttribute="bottom" constant="8" id="greet-lbl-top"/>
-                            <constraint firstItem="west-iv" firstAttribute="leading" secondItem="menu-safe" secondAttribute="leading" constant="40" id="west-iv-lead"/>
+                            <constraint firstItem="west-iv" firstAttribute="leading" secondItem="menu-safe" secondAttribute="leading" id="west-iv-lead"/>
                             <constraint firstItem="west-iv" firstAttribute="centerY" secondItem="menu-safe" secondAttribute="centerY" id="west-iv-cy"/>
-                            <constraint firstItem="east-iv" firstAttribute="trailing" secondItem="menu-safe" secondAttribute="trailing" constant="-40" id="east-iv-trail"/>
+                            <constraint firstItem="east-iv" firstAttribute="trailing" secondItem="menu-safe" secondAttribute="trailing" id="east-iv-trail"/>
                             <constraint firstItem="east-iv" firstAttribute="centerY" secondItem="menu-safe" secondAttribute="centerY" id="east-iv-cy"/>
                             <constraint firstItem="west-lbl" firstAttribute="top" secondItem="west-iv" secondAttribute="bottom" constant="8" id="west-lbl-top"/>
                             <constraint firstItem="west-lbl" firstAttribute="centerX" secondItem="west-iv" secondAttribute="centerX" id="west-lbl-cx"/>
@@ -157,14 +155,14 @@
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="card_back_red" translatesAutoresizingMaskIntoConstraints="NO" id="left-card">
                                 <rect key="frame" x="220" y="96" width="140" height="200"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="140" id="left-card-w"/>
+                                    <constraint firstAttribute="width" constant="140" priority="750" id="left-card-w"/>
                                     <constraint firstAttribute="height" constant="200" id="left-card-h"/>
                                 </constraints>
                             </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="card_back_black" translatesAutoresizingMaskIntoConstraints="NO" id="right-card">
                                 <rect key="frame" x="492" y="96" width="140" height="200"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="140" id="right-card-w"/>
+                                    <constraint firstAttribute="width" constant="140" priority="750" id="right-card-w"/>
                                     <constraint firstAttribute="height" constant="200" id="right-card-h"/>
                                 </constraints>
                             </imageView>
@@ -202,6 +200,8 @@
                             <constraint firstItem="clock-iv" firstAttribute="leading" secondItem="left-card" secondAttribute="trailing" constant="24" id="left-card-trail"/>
                             <constraint firstItem="right-card" firstAttribute="leading" secondItem="clock-iv" secondAttribute="trailing" constant="24" id="right-card-lead"/>
                             <constraint firstItem="right-card" firstAttribute="centerY" secondItem="game-safe" secondAttribute="centerY" id="right-card-cy"/>
+                            <constraint firstItem="left-card" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="game-safe" secondAttribute="leading" constant="8" id="left-card-leadmin"/>
+                            <constraint firstItem="game-safe" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="right-card" secondAttribute="trailing" constant="8" id="right-card-trailmin"/>
                         </constraints>
                     </view>
                     <connections>
@@ -276,8 +276,8 @@
     <resources>
         <image name="card_back_black" width="512" height="512"/>
         <image name="card_back_red" width="512" height="512"/>
-        <image name="globe.americas.fill" catalog="system" width="128" height="123"/>
-        <image name="globe.asia.australia.fill" catalog="system" width="128" height="123"/>
+        <image name="globe_east" width="249" height="490"/>
+        <image name="globe_west" width="249" height="490"/>
         <image name="timer" catalog="system" width="128" height="121"/>
         <systemColor name="labelColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

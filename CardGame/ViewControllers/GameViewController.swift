@@ -6,6 +6,9 @@
 //  face (shown ~3s), the stronger card scores a point, then they flip back.
 //  After 10 rounds it moves on to the summary screen.
 //
+//  Lifecycle: the round timer and background music are paused when the app is
+//  backgrounded (or the screen is left) and resumed when it returns.
+//
 
 import UIKit
 
@@ -30,6 +33,7 @@ final class GameViewController: UIViewController {
     private let facesVisibleSeconds = 3   // faces shown for 3s, then flipped back
     private var secondsLeft = 0
     private var timer: Timer?
+    private var isPausedByLifecycle = false
 
     /// Called by the menu before the segue.
     func configure(playerName: String, playerSide: Side) {
@@ -64,18 +68,52 @@ final class GameViewController: UIViewController {
         pcCardView.image = pcCardBack
         updateScores()
         timerLabel.text = "\(secondsPerRound)"
+
+        registerLifecycleObservers()
     }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if engine.roundsPlayed == 0 {
+            SoundManager.shared.startBackgroundMusic()
             beginRound()
         }
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        // Leaving the game stops the clock and the music.
         timer?.invalidate()
+        SoundManager.shared.stopBackgroundMusic()
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
+    // MARK: App background / foreground
+    private func registerLifecycleObservers() {
+        NotificationCenter.default.addObserver(
+            self, selector: #selector(handleEnterBackground),
+            name: UIApplication.didEnterBackgroundNotification, object: nil)
+        NotificationCenter.default.addObserver(
+            self, selector: #selector(handleEnterForeground),
+            name: UIApplication.willEnterForegroundNotification, object: nil)
+    }
+
+    @objc private func handleEnterBackground() {
+        guard timer != nil, !engine.isFinished else { return }
+        timer?.invalidate()
+        timer = nil
+        isPausedByLifecycle = true
+        SoundManager.shared.pauseBackgroundMusic()
+    }
+
+    @objc private func handleEnterForeground() {
+        guard isPausedByLifecycle, view.window != nil else { return }
+        isPausedByLifecycle = false
+        SoundManager.shared.resumeBackgroundMusic()
+        startTick()   // resume the countdown from where it stopped
     }
 
     // MARK: Game loop
@@ -87,11 +125,15 @@ final class GameViewController: UIViewController {
 
         revealFace(playerCardView, card: round.playerCard)
         revealFace(pcCardView, card: round.pcCard)
+        SoundManager.shared.playCardFlip()
         updateScores()
 
         secondsLeft = secondsPerRound
         timerLabel.text = "\(secondsLeft)"
+        startTick()
+    }
 
+    private func startTick() {
         timer?.invalidate()
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
             self?.tick()
@@ -106,6 +148,7 @@ final class GameViewController: UIViewController {
         if secondsLeft == secondsPerRound - facesVisibleSeconds {
             flipToBack(playerCardView, image: playerCardBack)
             flipToBack(pcCardView, image: pcCardBack)
+            SoundManager.shared.playCardFlip()
         }
 
         if secondsLeft <= 0 {
@@ -120,6 +163,7 @@ final class GameViewController: UIViewController {
 
     private func endGame() {
         timer?.invalidate()
+        SoundManager.shared.stopBackgroundMusic()
         performSegue(withIdentifier: "toSummary", sender: nil)
     }
 

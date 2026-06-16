@@ -50,13 +50,28 @@ CardGame/
 │   └── GameEngine.swift    // pure game logic (no UIKit) - covered by unit tests
 ├── Location/
 │   └── LocationService.swift // CLLocationManager wrapper + side from longitude
+├── Audio/
+│   └── SoundManager.swift  // AVAudioPlayer: looping music + flip / win effects
 ├── ViewControllers/
 │   ├── MenuViewController.swift
 │   ├── GameViewController.swift
 │   └── SummaryViewController.swift
+├── Sounds/                 // bg_music.mp3, card_flip.mp3, win_game.mp3
 ├── Base.lproj/Main.storyboard  // the UI: Navigation Controller + 3 scenes
-└── Assets.xcassets/            // 26 cards (clubs + diamonds, A–K) + 2 card backs
+└── Assets.xcassets/            // 26 cards + 2 card backs + day/night globes
 ```
+
+## 🌗 Part 2 features
+
+- **Dark mode:** text/background use dynamic system colors, and the menu globes
+  swap to night images (`globe_west` / `globe_east` have light + dark variants).
+- **Portrait + landscape:** all three screens use Auto Layout and work in both
+  orientations.
+- **Audio (`SoundManager`):** looping background music during the game,
+  a sound on every card flip, and a victory sound on the summary screen.
+  The music stops when the game stops (leaving the screen or backgrounding).
+- **Lifecycle:** the round timer and music pause when the app is backgrounded
+  and resume when it returns to the foreground.
 
 **Separation of concerns:** the game logic (`GameEngine`) and side selection
 (`LocationService.side(forLongitude:)`) are kept independent of UIKit so they can
