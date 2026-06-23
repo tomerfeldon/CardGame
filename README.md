@@ -1,11 +1,13 @@
 # CardGame 🃏
 
-A three-screen iOS card game (UIKit). The player's side (East/West) is chosen
-automatically from the device's GPS location, after which an automatic 10-round
-match plays out where the stronger card wins a point each round.
+CardGame is an iOS card game built with UIKit. When you open the app it reads the
+device's GPS location to decide which side of the world you play on — **East** or
+**West** — then runs an automatic 10-round duel against the computer, where the
+stronger card wins each round. It works in light and dark appearance, in portrait
+and landscape, and comes with background music and sound effects.
 
-Built in Swift with Storyboard (Interface Builder), Core Location, and unit
-tests using Swift Testing.
+Built in Swift with Storyboard (Interface Builder), Core Location, AVFoundation,
+and unit tests using Swift Testing.
 
 ---
 
@@ -38,6 +40,23 @@ tests using Swift Testing.
 
 ---
 
+## ✨ Features
+
+- **Location-based sides** — your longitude versus the reference meridian decides
+  whether you play East or West.
+- **Persistent player name** — saved in `UserDefaults` and remembered across launches.
+- **Automatic gameplay** — ten timed rounds with live scoring and card-flip animations.
+- **Light & dark mode** — text and background use dynamic system colors, and the
+  menu globes switch to night images.
+- **Portrait & landscape** — every screen is laid out with Auto Layout and adapts
+  to both orientations.
+- **Audio** — looping background music during the game, a sound on every card flip,
+  and a victory sound on the summary screen. The music stops when the game stops.
+- **Lifecycle-aware** — the round timer and music pause when the app is backgrounded
+  and resume when it returns to the foreground.
+
+---
+
 ## 🏗 Architecture
 
 ```
@@ -60,18 +79,6 @@ CardGame/
 ├── Base.lproj/Main.storyboard  // the UI: Navigation Controller + 3 scenes
 └── Assets.xcassets/            // 26 cards + 2 card backs + day/night globes
 ```
-
-## 🌗 Part 2 features
-
-- **Dark mode:** text/background use dynamic system colors, and the menu globes
-  swap to night images (`globe_west` / `globe_east` have light + dark variants).
-- **Portrait + landscape:** all three screens use Auto Layout and work in both
-  orientations.
-- **Audio (`SoundManager`):** looping background music during the game,
-  a sound on every card flip, and a victory sound on the summary screen.
-  The music stops when the game stops (leaving the screen or backgrounding).
-- **Lifecycle:** the round timer and music pause when the app is backgrounded
-  and resume when it returns to the foreground.
 
 **Separation of concerns:** the game logic (`GameEngine`) and side selection
 (`LocationService.side(forLongitude:)`) are kept independent of UIKit so they can
