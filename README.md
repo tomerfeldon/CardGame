@@ -82,6 +82,17 @@ Game → (segue `toSummary`) → Summary → `popToRootViewController` back to t
 
 ---
 
+## 🎨 UI — built in Storyboard
+
+The entire interface is laid out **visually in `Base.lproj/Main.storyboard`**
+(Interface Builder): a `UINavigationController` plus the three scenes, all
+positioned with **Auto Layout** constraints. Views are wired to their
+controllers through **`@IBOutlet` / `@IBAction`**, and screen transitions use
+storyboard **segues**. The Swift files hold only behaviour — there is no
+programmatic view building.
+
+---
+
 ## 🃏 Card assets
 
 - A pool of **26 cards**: clubs A–K and diamonds A–K - the two complete suits.
@@ -93,7 +104,8 @@ Game → (segue `toSummary`) → Summary → `popToRootViewController` back to t
 
 ## ▶️ Build & run
 
-**Requirements:** Xcode 16.2+, iOS 18.2+ (simulator or device), **Landscape** orientation.
+**Requirements:** Xcode 16.2+, iOS 18.2+ (simulator or device). Works in both
+**portrait and landscape**, and supports **light and dark** appearance.
 
 ```bash
 git clone https://github.com/tomerfeldon/CardGame
