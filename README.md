@@ -1,8 +1,8 @@
 # CardGame 🃏
 
 CardGame is an iOS card game built with UIKit. When you open the app it reads the
-device's GPS location to decide which side of the world you play on — **East** or
-**West** — then runs an automatic 10-round duel against the computer, where the
+device's GPS location to decide which side of the world you play on - **East** or
+**West** - then runs an automatic 10-round duel against the computer, where the
 stronger card wins each round. It works in light and dark appearance, in portrait
 and landscape, and comes with background music and sound effects.
 
@@ -42,17 +42,17 @@ and unit tests using Swift Testing.
 
 ## ✨ Features
 
-- **Location-based sides** — your longitude versus the reference meridian decides
+- **Location-based sides** - your longitude versus the reference meridian decides
   whether you play East or West.
-- **Persistent player name** — saved in `UserDefaults` and remembered across launches.
-- **Automatic gameplay** — ten timed rounds with live scoring and card-flip animations.
-- **Light & dark mode** — text and background use dynamic system colors, and the
+- **Persistent player name** - saved in `UserDefaults` and remembered across launches.
+- **Automatic gameplay** - ten timed rounds with live scoring and card-flip animations.
+- **Light & dark mode** - text and background use dynamic system colors, and the
   menu globes switch to night images.
-- **Portrait & landscape** — every screen is laid out with Auto Layout and adapts
+- **Portrait & landscape** - every screen is laid out with Auto Layout and adapts
   to both orientations.
-- **Audio** — looping background music during the game, a sound on every card flip,
+- **Audio** - looping background music during the game, a sound on every card flip,
   and a victory sound on the summary screen. The music stops when the game stops.
-- **Lifecycle-aware** — the round timer and music pause when the app is backgrounded
+- **Lifecycle-aware** - the round timer and music pause when the app is backgrounded
   and resume when it returns to the foreground.
 
 ---
@@ -89,13 +89,13 @@ Game → (segue `toSummary`) → Summary → `popToRootViewController` back to t
 
 ---
 
-## 🎨 UI — built in Storyboard
+## 🎨 UI - built in Storyboard
 
 The entire interface is laid out **visually in `Base.lproj/Main.storyboard`**
 (Interface Builder): a `UINavigationController` plus the three scenes, all
 positioned with **Auto Layout** constraints. Views are wired to their
 controllers through **`@IBOutlet` / `@IBAction`**, and screen transitions use
-storyboard **segues**. The Swift files hold only behaviour — there is no
+storyboard **segues**. The Swift files hold only behaviour - there is no
 programmatic view building.
 
 ---
